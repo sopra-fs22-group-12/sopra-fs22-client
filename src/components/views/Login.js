@@ -23,6 +23,7 @@ const FormField = props => {
         className="login input"
         placeholder="enter here.."
         value={props.value}
+        type={props.type}
         onChange={e => props.onChange(e.target.value)}
       />
     </div>
@@ -32,18 +33,21 @@ const FormField = props => {
 FormField.propTypes = {
   label: PropTypes.string,
   value: PropTypes.string,
+  type: PropTypes.string,
   onChange: PropTypes.func
 };
 
 const Login = props => {
   const history = useHistory();
-  const [name, setName] = useState(null);
+  const [password, setPassword] = useState(null);
   const [username, setUsername] = useState(null);
+  const [users, setUsers] = useState(null);
 
   const doLogin = async () => {
     try {
-      const requestBody = JSON.stringify({username, name});
+      const requestBody = JSON.stringify({username, password});
       const response = await api.post('/users', requestBody);
+      //const response = await api.get('/users');
 
       // Get the returned user and update a new object.
       const user = new User(response.data);
@@ -58,6 +62,10 @@ const Login = props => {
     }
   };
 
+  const goRegister = async () => {
+    history.push('/register')
+  }
+
   return (
     <BaseContainer>
       <div className="login container">
@@ -68,17 +76,26 @@ const Login = props => {
             onChange={un => setUsername(un)}
           />
           <FormField
-            label="Name"
-            value={name}
-            onChange={n => setName(n)}
+            label="Password"
+            value={password}
+            type="password"
+            onChange={n => setPassword(n)}
           />
           <div className="login button-container">
             <Button
-              disabled={!username || !name}
+              disabled={!username || !password}
               width="100%"
               onClick={() => doLogin()}
             >
               Login
+            </Button>
+          </div>
+          <div className="Register button-container">
+            <Button
+              width="100%"
+              onClick={() => goRegister()}
+              >
+              Register
             </Button>
           </div>
         </div>
