@@ -9,12 +9,12 @@ import PropTypes from "prop-types";
 
 const FormField = props => {
     return (
-        <div className="login field">
-            <label className="login label">
+        <div className="register field">
+            <label className="register label">
                 {props.label}
             </label>
             <input
-                className="login input"
+                className="register input"
                 placeholder="enter here.."
                 value={props.value}
                 type={props.type}

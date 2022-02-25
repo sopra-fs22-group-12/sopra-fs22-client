@@ -48,7 +48,26 @@ const Login = props => {
       const requestBody = JSON.stringify({username, password});
       const response = await api.post('/users', requestBody);
       //const response = await api.get('/users');
+      /**
+      setUsers(response.data);
 
+      let found = false;
+      for (let i=0; i<users.length; i++){
+        let use = users[i];
+        if (use.username === username){
+          found = true;
+          if(use.password === password){
+            localStorage.setItem('token', use.token);
+            history.push('/game');
+          }else
+          {
+            throw new Error('Wrong Password');
+          }
+        }
+      }
+      if(found === false){
+        throw new Error('Username not found');
+      }**/
       // Get the returned user and update a new object.
       const user = new User(response.data);
 
