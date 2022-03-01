@@ -21,7 +21,7 @@ const FormField = props => {
       </label>
       <input
         className="login input"
-        placeholder="enter here.."
+        placeholder={props.placeholder}
         value={props.value}
         type={props.type}
         onChange={e => props.onChange(e.target.value)}
@@ -32,6 +32,7 @@ const FormField = props => {
 
 FormField.propTypes = {
   label: PropTypes.string,
+  placeholder: PropTypes.string,
   value: PropTypes.string,
   type: PropTypes.string,
   onChange: PropTypes.func
@@ -46,11 +47,11 @@ const Login = props => {
   const doLogin = async () => {
     try {
       const requestBody = JSON.stringify({username, password});
-      const response = await api.post('/users', requestBody);
+      const response = await api.post('/user/login', requestBody);
       //const response = await api.get('/users');
-      /**
-      setUsers(response.data);
 
+      setUsers(response.data);
+       /**
       let found = false;
       for (let i=0; i<users.length; i++){
         let use = users[i];
@@ -73,6 +74,7 @@ const Login = props => {
 
       // Store the token into the local storage.
       localStorage.setItem('token', user.token);
+      localStorage.setItem('id', user.id);
 
       // Login successfully worked --> navigate to the route /game in the GameRouter
       history.push(`/game`);
@@ -91,11 +93,14 @@ const Login = props => {
         <div className="login form">
           <FormField
             label="Username"
+            type="text"
+            placeholder="Username here..."
             value={username}
             onChange={un => setUsername(un)}
           />
           <FormField
             label="Password"
+            placeholder="Password here..."
             value={password}
             type="password"
             onChange={n => setPassword(n)}

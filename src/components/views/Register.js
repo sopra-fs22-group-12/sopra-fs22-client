@@ -15,7 +15,7 @@ const FormField = props => {
             </label>
             <input
                 className="register input"
-                placeholder="enter here.."
+                placeholder={props.placeholder}
                 value={props.value}
                 type={props.type}
                 onChange={e => props.onChange(e.target.value)}
@@ -26,6 +26,7 @@ const FormField = props => {
 
 FormField.propTypes = {
     label: PropTypes.string,
+    placeholder : PropTypes.string,
     value: PropTypes.string,
     type: PropTypes.string,
     onChange: PropTypes.func
@@ -44,9 +45,11 @@ const Register = props => {
 
             // Get the returned user and update a new object.
             const user = new User(response.data);
+            console.log(user.token); //-> null
 
             // Store the token into the local storage.
             localStorage.setItem('token', user.token);
+            localStorage.setItem('id', user.id);
 
             // Login successfully worked --> navigate to the route /game in the GameRouter
             history.push(`/game`);
@@ -61,17 +64,22 @@ const Register = props => {
                 <div className="register form">
                     <FormField
                         label="Username"
+                        type="text"
+                        placeholder="Username here ..."
                         value={username}
                         onChange={un => setUsername(un)}
                     />
                     <FormField
                         label="Name"
+                        type="text"
+                        placeholder="Name here ..."
                         value={name}
                         onChange={n => setName(n)}
                     />
                     <FormField
                         label="password"
                         type="password"
+                        placeholder="Password here ..."
                         value={password}
                         onChange={p => setPassword(p)}
                     />

@@ -2,19 +2,37 @@ import {useEffect, useState} from 'react';
 import {api, handleError} from 'helpers/api';
 import {Spinner} from 'components/ui/Spinner';
 import {Button} from 'components/ui/Button';
-import {useHistory} from 'react-router-dom';
+import {useHistory,Link} from 'react-router-dom';
 import BaseContainer from "components/ui/BaseContainer";
 import PropTypes from "prop-types";
 import "styles/views/Game.scss";
+import Profile from "components/views/Profile"
 
-const Player = ({user}) => (
-  <div className="player container">
-    <div className="player username">{user.username}</div>
-    <div className="player name">{user.name}</div>
-    <div className="player id">id: {user.id}</div>
-  </div>
+/**
+const Player = ({user}) => {
+    const GoProfile = (user) => {
+        const history = useHistory();
+        console.log("clicked");
+        //history.push('/game/profile');
+        //<Profile id={user.id}/>
+    }
+    return(
+        <div className="player container" >
+            <Button onClick={GoProfile({user})}>Profile</Button>
+            <div><Link className="player username" onClick={GoProfile({user})}>{user.username}</Link></div>
+            <div className="player name">{user.name}</div>
+            <div className="player id">id: {user.id}</div>
+        </div>);
+} //this is one of my approaches*/
+
+const Player = ({user, history}) => (
+        <div className="player container" >
+            <Button onClick={() => history.push('/profile/' + user.id)}>Profile</Button>
+            <div className="player username" >{user.username}</div>
+            <div className="player name">{user.name}</div>
+            <div className="player id">id: {user.id}</div>
+        </div>
 );
-
 Player.propTypes = {
   user: PropTypes.object
 };
@@ -30,9 +48,19 @@ const Game = () => {
   // more information can be found under https://reactjs.org/docs/hooks-state.html
   const [users, setUsers] = useState(null);
 
-  const logout = () => {
-    localStorage.removeItem('token');
-    history.push('/login');
+  const logout = async () => {
+      /**const status = "OFFLINE";*/
+
+      const id = localStorage.getItem('id');
+      console.log(id); //-> null
+      /**const token = '45b04b6f-ab52-4ece-9506-3807e7a601d4]';*/
+      if(id !== null){
+          const response = await api.put(`/logout/${id}`);
+      }
+
+      localStorage.removeItem('id');
+      localStorage.removeItem('token');
+      history.push('/login');
   }
 
   // the effect hook can be used to react to change in your component.
@@ -70,16 +98,26 @@ const Game = () => {
     }
 
     fetchData();
+    /**return () => {
+        localStorage.removeItem("token");
+    }//approach to unmount*/
   }, []);
+
+    /**const GoProfile = (user) => {
+        const history = useHistory();
+        console.log("clicked");
+        //history.push('/game/profile');
+        //<Profile id={user.id}/>
+    }*/
 
   let content = <Spinner/>;
 
   if (users) {
     content = (
       <div className="game">
-        <ul className="game user-list">
+        <ul className="game user-list" >
           {users.map(user => (
-            <Player user={user} key={user.id}/>
+              <Player user={user} history={history} key={user.id}/>
           ))}
         </ul>
         <Button
