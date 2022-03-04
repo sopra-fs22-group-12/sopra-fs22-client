@@ -47,7 +47,7 @@ const Login = props => {
   const doLogin = async () => {
     try {
       const requestBody = JSON.stringify({username, password});
-      const response = await api.post('/user/login', requestBody);
+      const response = await api.put('/user/login', requestBody);
       //const response = await api.get('/users');
 
       setUsers(response.data);
@@ -84,7 +84,7 @@ const Login = props => {
   };
 
   const goRegister = async () => {
-    history.push('/register')
+    history.push('/register');
   }
 
   return (
