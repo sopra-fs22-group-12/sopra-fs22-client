@@ -8,27 +8,10 @@ import PropTypes from "prop-types";
 import "styles/views/Game.scss";
 import Profile from "components/views/Profile"
 
-/**
-const Player = ({user}) => {
-    const GoProfile = (user) => {
-        const history = useHistory();
-        console.log("clicked");
-        //history.push('/game/profile');
-        //<Profile id={user.id}/>
-    }
-    return(
-        <div className="player container" >
-            <Button onClick={GoProfile({user})}>Profile</Button>
-            <div><Link className="player username" onClick={GoProfile({user})}>{user.username}</Link></div>
-            <div className="player name">{user.name}</div>
-            <div className="player id">id: {user.id}</div>
-        </div>);
-} //this is one of my approaches*/
 
 const Player = ({user, history}) => (
         <div className="player container" >
-            <Button onClick={() => history.push('/profile/' + user.id)}>Profile</Button>
-            <div className="player username" >{user.username}</div>
+            <div className="player username" ><p onClick={() => history.push('/profile/' + user.id)}> {user.username}</p></div>
             <div className="player name">{user.name}</div>
             <div className="player id">id: {user.id}</div>
         </div>
@@ -54,7 +37,7 @@ const Game = () => {
       const id = localStorage.getItem('id');
       console.log(id); //-> null
       /**const token = '45b04b6f-ab52-4ece-9506-3807e7a601d4]';*/
-      if(id !== null){
+      if(id  !== null){
           const response = await api.put(`/logout/${id}`);
       }
 
@@ -103,12 +86,7 @@ const Game = () => {
     }//approach to unmount*/
   }, []);
 
-    /**const GoProfile = (user) => {
-        const history = useHistory();
-        console.log("clicked");
-        //history.push('/game/profile');
-        //<Profile id={user.id}/>
-    }*/
+
 
   let content = <Spinner/>;
 

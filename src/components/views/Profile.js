@@ -39,7 +39,7 @@ FormField.propTypes = {
     value: PropTypes.string,
     type: PropTypes.string,
     onChange: PropTypes.func,
-    disabled: PropTypes.string
+    disabled: PropTypes.bool
 };
 
 const Profile = props => {
@@ -51,7 +51,7 @@ const Profile = props => {
     const [creationDate, setCreationDate] = useState(null);
      const [birthday, setBirthday] = useState(null);
      const [user, setUser] = useState(null);
-
+    const accountUserID = localStorage.getItem('id');
     useEffect(() => {
         async function fetchData() {
             try {
@@ -69,8 +69,7 @@ const Profile = props => {
                 setUsername(response.data.username);
                 setStatus(response.data.status);
                 setCreationDate(response.data.date);
-                setBirthday(response.data.birthday);/***/
-
+                setBirthday(response.data.birthday);
 
                 // This is just some data for you to see what is available.
                 // Feel free to remove it.
@@ -92,34 +91,30 @@ const Profile = props => {
     },[props.match.params.id]);
 
     const doEdit = async () => {
-        const thisUserID = localStorage.getItem('id');
-        const toBeChangeUserID = props.match.params.id;
-        console.log("This user ID "+ thisUserID);
-        console.log("Change user ID " + toBeChangeUserID);
+
+        console.log("This is the Users Birthday: "+ typeof birthday);
         try {
-            if(thisUserID !== toBeChangeUserID){
-                throw new Error("You may only modify your own data");
-            }
-            const requestBody = JSON.stringify({thisUserID,username, birthday}); //myToken for authentication, userId, username, birthDate
+            const requestBody = JSON.stringify({username, birthday, id:accountUserID}); //myToken for authentication, userId, username, birthDate
             await api.put(`/users/${props.match.params.id}`, requestBody);
-            //const response = await api.get('/users');
                 // Get the returned user and update a new object.
-            //const user = new User(response.data);
 
-            // Store the token into the local storage.
-            //localStorage.setItem('token', user.token);
-
-            // Login successfully worked --> navigate to the route /game in the GameRouter
-            history.push('/profile/' + user.id)
+            // Editing worked navigate to the profile page
+            history.push('/profile/' + user.id);
         } catch (error) {
             alert(`Something went wrong (May need to visit the console): \n${handleError(error)}`);
         }
     };
 
     const goDashboard = async () => {
-        history.push('/game/dashboard')
+        history.push('/game/dashboard');
     }
-
+    const myIdDisable = () => {
+      if(props.match.params.id === localStorage.getItem('id')){
+          return false;
+      }else {
+          return true;
+      }
+    }
     return (
         <BaseContainer>
             <div className="profile container">
@@ -127,37 +122,40 @@ const Profile = props => {
                     <FormField
                         label="Username"
                         type="text"
-                        placeholder="{user.username}"
+                        placeholder="username..."
                         value={username}
                         onChange={un => setUsername(un)}
+                        disabled={myIdDisable()}
                     />
                     <FormField
                         label="online status"
-                        placeholder="{user.status}"
+                        placeholder="status..."
                         value={status}
                         disabled="true"
                     />
                     <FormField
                         label="creation date"
-                        placeholder="{user.date}"
+                        placeholder="date..."
                         value={creationDate}
+                        type="date"
                         disabled="true"
                     />
                     <FormField
                         label="birth date (optional)"
-                        placeholder="{user.birthDate}"
+                        placeholder="birthday..."
                         value={birthday}
                         type="date"
                         onChange={b => setBirthday(b)}
+                        disabled={myIdDisable()}
                     />
                     <div className="ChangeProfile button-container">
-                        <Button
-                            disabled={!username}
+                        {!myIdDisable() && <Button
+                            disabled={!username || myIdDisable()}
                             width="100%"
                             onClick={() => doEdit()}
                         >
                             Edit
-                        </Button>
+                        </Button>}
                     </div>
                     <div className="Dashboard button-container">
                         <Button
