@@ -67,7 +67,7 @@ const Profile = props => {
                 // Get the returned users and update the state.
                 setUser(response.data);
                 setUsername(response.data.username);
-                setStatus(response.data.status);
+                setStatus(response.data.loggedIn);
                 setCreationDate(response.data.date);
                 setBirthday(response.data.birthday);
 
@@ -128,7 +128,7 @@ const Profile = props => {
                         disabled={myIdDisable()}
                     />
                     <FormField
-                        label="online status"
+                        label="Is user logged in"
                         placeholder="status..."
                         value={status}
                         disabled="true"
