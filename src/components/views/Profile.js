@@ -1,12 +1,13 @@
 
 import React, {useEffect, useState} from 'react';
-import {api, handleError} from 'helpers/api';
+import { apiLoggedIn, handleError} from 'helpers/api';
 import User from 'models/User';
 import {useHistory} from 'react-router-dom';
 import {Button} from 'components/ui/Button';
 import 'styles/views/Profile.scss';
 import BaseContainer from "components/ui/BaseContainer";
 import PropTypes from "prop-types";
+import header from "./Header";
 
 
 /*
@@ -51,13 +52,13 @@ const Profile = props => {
     const [creationDate, setCreationDate] = useState(null);
      const [birthday, setBirthday] = useState(null);
      const [user, setUser] = useState(null);
-    const accountUserID = localStorage.getItem('id');
+    //const accountUserID = localStorage.getItem('id');
     useEffect(() => {
         async function fetchData() {
             try {
                 //const response = await api.get('/users/userId',requestBody);
                 //const response = await api.get('/users/${userId}', (id));
-                const response = await api.get(`/users/${props.match.params.id}`);
+                const response = await apiLoggedIn().get(`/users/${props.match.params.id}`);
 
                 // delays continuous execution of an async operation for 1 second.
                 // This is just a fake async call, so that the spinner can be displayed
@@ -92,10 +93,15 @@ const Profile = props => {
 
     const doEdit = async () => {
 
-        console.log("This is the Users Birthday: "+ typeof birthday);
+        //console.log("This is the Users Birthday: "+ typeof birthday);
         try {
-            const requestBody = JSON.stringify({username, birthday, id:accountUserID}); //myToken for authentication, userId, username, birthDate
-            await api.put(`/users/${props.match.params.id}`, requestBody);
+            const requestBody = JSON.stringify({username, birthday}); //myToken for authentication, userId, username, birthDate
+            const token = localStorage.getItem('token');
+            //console.log(token);
+            const headers = {"Authorization":token};
+            //console.log(headers);
+            await apiLoggedIn().put(`users/${props.match.params.id}`,requestBody);
+            //await api.put(`/users/${props.match.params.id}`, requestBody,{headers});
                 // Get the returned user and update a new object.
 
             // Editing worked navigate to the profile page
@@ -115,6 +121,15 @@ const Profile = props => {
           return true;
       }
     }
+    const myStatus = () => {
+        if(status === true){
+            return "ONLINE";
+        }
+        if(status === false){
+            return "OFFLINE";
+        }
+        return "status...";
+    }
     return (
         <BaseContainer>
             <div className="profile container">
@@ -128,9 +143,9 @@ const Profile = props => {
                         disabled={myIdDisable()}
                     />
                     <FormField
-                        label="Is user logged in"
+                        label="User Status"
                         placeholder="status..."
-                        value={status}
+                        value={myStatus()}
                         disabled="true"
                     />
                     <FormField
