@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {api, handleError} from 'helpers/api';
+import {apiLoggedIn, handleError} from 'helpers/api';
 import {Spinner} from 'components/ui/Spinner';
 import {Button} from 'components/ui/Button';
 import {useHistory,Link} from 'react-router-dom';
@@ -38,7 +38,7 @@ const Game = () => {
       console.log(id); //-> null
       /**const token = '45b04b6f-ab52-4ece-9506-3807e7a601d4]';*/
       if(id  !== null){
-          const response = await api.put(`/logout/${id}`);
+          const response = await apiLoggedIn().put(`/logout/${id}`);
       }
 
       localStorage.removeItem('id');
@@ -54,7 +54,7 @@ const Game = () => {
     // effect callbacks are synchronous to prevent race conditions. So we put the async function inside:
     async function fetchData() {
       try {
-        const response = await api.get('/users');
+        const response = await apiLoggedIn().get('/users');
 
         // delays continuous execution of an async operation for 1 second.
         // This is just a fake async call, so that the spinner can be displayed

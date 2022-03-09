@@ -3,8 +3,14 @@ import { getDomain } from 'helpers/getDomain';
 
 export const api = axios.create({
   baseURL: getDomain(),
-  headers: { 'Content-Type': 'application/json' }
+  headers: { 'Content-Type': 'application/json'}
 });
+
+export const apiLoggedIn = () => {return axios.create({
+  baseURL: getDomain(),
+  headers: { 'Content-Type': 'application/json',
+    'Authorization':'Basic ' + localStorage.getItem('token')}
+});};
 
 export const handleError = error => {
   const response = error.response;
