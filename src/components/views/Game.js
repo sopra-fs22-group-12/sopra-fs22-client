@@ -2,11 +2,10 @@ import {useEffect, useState} from 'react';
 import {apiLoggedIn, handleError} from 'helpers/api';
 import {Spinner} from 'components/ui/Spinner';
 import {Button} from 'components/ui/Button';
-import {useHistory,Link} from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 import BaseContainer from "components/ui/BaseContainer";
 import PropTypes from "prop-types";
 import "styles/views/Game.scss";
-import Profile from "components/views/Profile"
 
 
 const Player = ({user, history}) => (
@@ -17,7 +16,8 @@ const Player = ({user, history}) => (
         </div>
 );
 Player.propTypes = {
-  user: PropTypes.object
+  user: PropTypes.object,
+  history: PropTypes.object
 };
 
 const Game = () => {
@@ -32,13 +32,10 @@ const Game = () => {
   const [users, setUsers] = useState(null);
 
   const logout = async () => {
-      /**const status = "OFFLINE";*/
 
       const id = localStorage.getItem('id');
-      console.log(id); //-> null
-      /**const token = '45b04b6f-ab52-4ece-9506-3807e7a601d4]';*/
       if(id  !== null){
-          const response = await apiLoggedIn().put(`/logout/${id}`);
+          const response = await apiLoggedIn().post(`/logout/${id}`);
       }
 
       localStorage.removeItem('id');
@@ -81,9 +78,6 @@ const Game = () => {
     }
 
     fetchData();
-    /**return () => {
-        localStorage.removeItem("token");
-    }//approach to unmount*/
   }, []);
 
 
