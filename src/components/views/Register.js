@@ -45,10 +45,9 @@ const Register = props => {
 
             // Get the returned user and update a new object.
             const user = new User(response.data);
-            console.log(user.token); //-> null
 
             // Store the token into the local storage.
-            localStorage.setItem('token', user.token);
+            localStorage.setItem('token', response.headers.token);
             localStorage.setItem('id', user.id);
 
             // Login successfully worked --> navigate to the route /game in the GameRouter

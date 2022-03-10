@@ -9,7 +9,7 @@ export const api = axios.create({
 export const apiLoggedIn = () => {return axios.create({
   baseURL: getDomain(),
   headers: { 'Content-Type': 'application/json',
-    'Authorization':'Basic ' + localStorage.getItem('token')}
+    'Authorization':'Bearer ' + localStorage.getItem('token')}
 });};
 
 export const handleError = error => {

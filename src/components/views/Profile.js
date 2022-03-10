@@ -7,7 +7,6 @@ import {Button} from 'components/ui/Button';
 import 'styles/views/Profile.scss';
 import BaseContainer from "components/ui/BaseContainer";
 import PropTypes from "prop-types";
-import header from "./Header";
 
 
 /*
@@ -52,7 +51,6 @@ const Profile = props => {
     const [creationDate, setCreationDate] = useState(null);
      const [birthday, setBirthday] = useState(null);
      const [user, setUser] = useState(null);
-    //const accountUserID = localStorage.getItem('id');
     useEffect(() => {
         async function fetchData() {
             try {
@@ -65,7 +63,7 @@ const Profile = props => {
                 // feel free to remove it :)
                 await new Promise(resolve => setTimeout(resolve, 1000));
 
-                // Get the returned users and update the state.
+                // Get the returned users and update the state. (hooks used)
                 setUser(response.data);
                 setUsername(response.data.username);
                 setStatus(response.data.loggedIn);
@@ -96,16 +94,12 @@ const Profile = props => {
         //console.log("This is the Users Birthday: "+ typeof birthday);
         try {
             const requestBody = JSON.stringify({username, birthday}); //myToken for authentication, userId, username, birthDate
-            const token = localStorage.getItem('token');
-            //console.log(token);
-            const headers = {"Authorization":token};
-            //console.log(headers);
             await apiLoggedIn().put(`users/${props.match.params.id}`,requestBody);
-            //await api.put(`/users/${props.match.params.id}`, requestBody,{headers});
                 // Get the returned user and update a new object.
 
             // Editing worked navigate to the profile page
             history.push('/profile/' + user.id);
+            //history.go(0);
         } catch (error) {
             alert(`Something went wrong (May need to visit the console): \n${handleError(error)}`);
         }
@@ -120,7 +114,7 @@ const Profile = props => {
       }else {
           return true;
       }
-    }
+    };
     const myStatus = () => {
         if(status === true){
             return "ONLINE";
@@ -129,7 +123,7 @@ const Profile = props => {
             return "OFFLINE";
         }
         return "status...";
-    }
+    };
     return (
         <BaseContainer>
             <div className="profile container">
@@ -163,7 +157,7 @@ const Profile = props => {
                         onChange={b => setBirthday(b)}
                         disabled={myIdDisable()}
                     />
-                    <div className="ChangeProfile button-container">
+                    <div className="Profile button-container">
                         {!myIdDisable() && <Button
                             disabled={!username || myIdDisable()}
                             width="100%"
@@ -185,9 +179,6 @@ const Profile = props => {
         </BaseContainer>
     );
 };
-/**Profile.propTypes = {
-    id: PropTypes.long,
-};*/
 
 /**
  * You can get access to the history object's properties via the withRouter.
