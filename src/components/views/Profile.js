@@ -66,8 +66,8 @@ const Profile = props => {
                 // Get the returned users and update the state. (hooks used)
                 setUser(response.data);
                 setUsername(response.data.username);
-                setStatus(response.data.loggedIn);
-                setCreationDate(response.data.date);
+                setStatus(response.data.logged_in);
+                setCreationDate(response.data.creation_date);
                 setBirthday(response.data.birthday);
 
                 // This is just some data for you to see what is available.
@@ -140,14 +140,14 @@ const Profile = props => {
                         label="User Status"
                         placeholder="status..."
                         value={myStatus()}
-                        disabled="true"
+                        disabled={true}
                     />
                     <FormField
                         label="creation date"
                         placeholder="date..."
                         value={creationDate}
                         type="date"
-                        disabled="true"
+                        disabled={true}
                     />
                     <FormField
                         label="birth date (optional)"

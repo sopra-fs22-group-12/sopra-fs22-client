@@ -6,8 +6,8 @@ class User {
     this.id = null;
     this.name = null;
     this.username = null;
-    this.loggedIn = null;
-    this.date = null;
+    this.logged_in = null;
+    this.creation_date = null;
     this.birthday = null;
     Object.assign(this, data);
   }

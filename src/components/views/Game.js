@@ -35,7 +35,7 @@ const Game = () => {
 
       const id = localStorage.getItem('id');
       if(id  !== null){
-          const response = await apiLoggedIn().post(`/logout/${id}`);
+          const response = await apiLoggedIn().put(`/logout/${id}`);
       }
 
       localStorage.removeItem('id');

@@ -41,6 +41,7 @@ const Register = props => {
     const doLogin = async () => {
         try {
             const requestBody = JSON.stringify({username, name, password});
+            //const requestBody = JSON.stringify({username,password});
             const response = await api.post('/users', requestBody);
 
             // Get the returned user and update a new object.
@@ -56,6 +57,10 @@ const Register = props => {
             alert(`Something went wrong during the login: \n${handleError(error)}`);
         }
     };
+
+    const goToLogin = () => {
+      history.push(`/login`);
+    }
 
     return (
         <BaseContainer>
@@ -84,11 +89,17 @@ const Register = props => {
                     />
                     <div className="Register button-container">
                         <Button
-                            disabled={!username || !name || !password}
+                            disabled={!username || !name ||  !password}
                             width="100%"
                             onClick={() => doLogin()}
                         >
                             Register
+                        </Button>
+                        <Button
+                            width="100%"
+                            onClick={() => goToLogin()}
+                        >
+                            Go Back
                         </Button>
                     </div>
                 </div>
